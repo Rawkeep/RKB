@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guide Visuel — Tcha Agro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f7;color:#1d1d1f;line-height:1.6}
+.container{max-width:1000px;margin:0 auto;padding:40px 20px}
+h1{font-size:2.5em;text-align:center;margin-bottom:10px;background:linear-gradient(135deg,#d97706,#15803d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.subtitle{text-align:center;color:#86868b;font-size:1.2em;margin-bottom:50px}
+.section{margin-bottom:60px}
+.section h2{font-size:1.8em;margin-bottom:20px;color:#1d1d1f;display:flex;align-items:center;gap:12px}
+.section h2 .emoji{font-size:1.4em}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px}
+.card{background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.08);overflow:hidden}
+.card-header{background:linear-gradient(135deg,#d97706,#15803d);color:#fff;padding:16px 20px;font-weight:600;font-size:1.1em}
+.card-body{padding:20px}
+.phone-frame{background:#0a0f1a;border-radius:24px;padding:12px;max-width:280px;margin:0 auto;box-shadow:0 8px 30px rgba(0,0,0,.2)}
+.phone-screen{background:#0a0f1a;border-radius:16px;overflow:hidden;color:#e2e8f0;font-size:12px}
+.phone-topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #1e2d4a;background:rgba(15,22,41,.85)}
+.phone-topbar .logo{display:flex;align-items:center;gap:8px}
+.phone-topbar .logo-icon{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,#d97706,#15803d);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:10px}
+.phone-topbar .logo-text{font-size:11px;font-weight:600}
+.phone-topbar .logo-sub{font-size:9px;color:#64748b}
+.phone-content{padding:14px;min-height:280px}
+.phone-navbar{display:flex;border-top:1px solid #1e2d4a;background:rgba(15,22,41,.92)}
+.phone-navbar .nav-item{flex:1;padding:10px 0;text-align:center;font-size:9px;color:#475569}
+.phone-navbar .nav-item.active{color:#3b82f6}
+.phone-navbar .nav-item svg{width:18px;height:18px;display:block;margin:0 auto 3px}
+.stat-card{padding:10px;border-radius:10px;margin-bottom:8px}
+.stat-green{background:linear-gradient(135deg,rgba(52,211,153,.1),transparent);border:1px solid rgba(52,211,153,.15)}
+.stat-red{background:linear-gradient(135deg,rgba(248,113,113,.1),transparent);border:1px solid rgba(248,113,113,.15)}
+.stat-label{font-size:9px;color:#94a3b8;margin-bottom:3px}
+.stat-value{font-size:14px;font-weight:700}
+.stat-green .stat-value{color:#34d399}
+.stat-red .stat-value{color:#f87171}
+.input-demo{background:#151d30;border:1px solid #1e2d4a;border-radius:10px;display:flex;align-items:center;margin:12px 0;overflow:hidden}
+.input-demo input{flex:1;background:transparent;border:none;padding:14px;font-size:22px;font-weight:700;color:#e2e8f0;text-align:right;font-family:'JetBrains Mono',monospace}
+.input-demo .suffix{padding:14px;font-size:13px;font-weight:600;color:#d97706;background:linear-gradient(90deg,transparent,rgba(217,119,6,.08))}
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.chip{padding:8px 12px;border-radius:8px;font-size:10px;border:1px solid #1e2d4a;color:#64748b}
+.chip.active-green{border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.12);color:#34d399}
+.chip.active-blue{border-color:rgba(59,130,246,.4);background:rgba(59,130,246,.12);color:#3b82f6}
+.btn-demo{background:#3b82f6;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:600;width:100%;font-size:12px;margin-top:10px}
+.step-list{counter-reset:step}
+.step-list li{list-style:none;padding:16px 20px 16px 60px;position:relative;border-left:2px solid #d97706;margin-left:20px}
+.step-list li::before{counter-increment:step;content:counter(step);position:absolute;left:-22px;top:12px;width:40px;height:40px;background:linear-gradient(135deg,#d97706,#15803d);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1em}
+.step-list li:last-child{border-left-color:transparent}
+.step-title{font-weight:600;font-size:1.1em;margin-bottom:6px}
+.step-desc{color:#86868b}
+.tip-box{background:linear-gradient(135deg,rgba(217,119,6,.08),rgba(21,128,61,.08));border:1px solid rgba(217,119,6,.2);border-radius:12px;padding:20px;margin-top:20px}
+.tip-box h4{color:#d97706;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:20px}
+.feature{background:#fff;border-radius:12px;padding:20px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.feature .icon{font-size:2.5em;margin-bottom:10px}
+.feature h4{margin-bottom:6px}
+.feature p{color:#86868b;font-size:.9em}
+.lang-btns{display:flex;gap:8px;justify-content:center;margin:30px 0}
+.lang-btns button{padding:10px 24px;border-radius:20px;border:2px solid #d97706;background:#fff;font-weight:600;cursor:pointer;transition:all .2s}
+.lang-btns button.active{background:linear-gradient(135deg,#d97706,#15803d);color:#fff;border-color:transparent}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🌾 Tcha Agro</h1>
+  <p class="subtitle">Guide visuel d'utilisation</p>
+
+  <!-- Language Selection -->
+  <div class="lang-btns">
+    <button class="active">🇫🇷 Français</button>
+    <button>🇩🇪 Deutsch</button>
+    <button>🇬🇧 English</button>
+  </div>
+
+  <!-- Section: Screenshots -->
+  <div class="section">
+    <h2><span class="emoji">📱</span> Aperçu de l'application</h2>
+    
+    <div class="grid">
+      <!-- Dashboard Screenshot -->
+      <div class="card">
+        <div class="card-header">Tableau de bord (Accueil)</div>
+        <div class="card-body">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="phone-topbar">
+                <div class="logo">
+                  <div class="logo-icon">TA</div>
+                  <div><div class="logo-text">Tcha Agro</div><div class="logo-sub">Business Center</div></div>
+                </div>
+                <span style="font-size:10px;color:#34d399">● En ligne</span>
+              </div>
+              <div class="phone-content">
+                <p style="font-size:11px;color:#94a3b8;margin-bottom:10px">Bonjour, <strong style="color:#e2e8f0">Chef</strong></p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                  <div class="stat-card stat-green">
+                    <div class="stat-label">↑ Recettes</div>
+                    <div class="stat-value">125 000 FCFA</div>
+                  </div>
+                  <div class="stat-card stat-red">
+                    <div class="stat-label">↓ Dépenses</div>
+                    <div class="stat-value">45 000 FCFA</div>
+                  </div>
+                </div>
+                <p style="font-size:10px;color:#64748b;margin:12px 0 8px">Dernières opérations</p>
+                <div style="background:#151d30;border-radius:8px;padding:10px;margin-bottom:6px">
+                  <div style="display:flex;justify-content:space-between;font-size:10px">
+                    <span style="color:#34d399">● Vente</span>
+                    <span style="font-weight:600">+50 000 FCFA</span>
+                  </div>
+                  <div style="font-size:9px;color:#64748b;margin-top:3px">Poulets · Aujourd'hui</div>
+                </div>
+                <div style="background:#151d30;border-radius:8px;padding:10px">
+                  <div style="display:flex;justify-content:space-between;font-size:10px">
+                    <span style="color:#f87171">● Dépense</span>
+                    <span style="font-weight:600">-15 000 FCFA</span>
+                  </div>
+                  <div style="font-size:9px;color:#64748b;margin-top:3px">Transport · Hier</div>
+                </div>
+              </div>
+              <div class="phone-navbar">
+                <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Accueil</div>
+                <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>Caisse</div>
+                <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16.5 9.4l-9-5.19M21 16V8l-7-4-2 0-7 4v8l7 4 2 0z"/></svg>Stock</div>
+                <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 18V6a2 2 0 00-2-2H4a2 2 0 00-2 2v11h1"/><path d="M15 18h2l3-3V8h-5"/><circle cx="7" cy="18" r="2"/><circle cx="18.5" cy="18" r="2"/></svg>Livraison</div>
+                <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2"/></svg>Plus</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Transaction Screenshot -->
+      <div class="card">
+        <div class="card-header">Nouvelle opération (Caisse)</div>
+        <div class="card-body">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="phone-topbar">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                  <span style="font-size:12px;font-weight:600">Nouvelle opération</span>
+                </div>
+              </div>
+              <div class="phone-content">
+                <div class="chip-row">
+                  <span class="chip active-green">🟢 Vente</span>
+                  <span class="chip">🔵 Recette</span>
+                  <span class="chip">🔴 Dépense</span>
+                </div>
+                
+                <p style="font-size:10px;color:#64748b;margin:14px 0 6px">Montant *</p>
+                <div class="input-demo">
+                  <input type="text" value="25000" readonly>
+                  <span class="suffix">FCFA</span>
+                </div>
+
+                <p style="font-size:10px;color:#64748b;margin:10px 0 6px">Catégorie *</p>
+                <div class="chip-row">
+                  <span class="chip active-blue">Poulets</span>
+                  <span class="chip">Œufs</span>
+                  <span class="chip">Maïs</span>
+                  <span class="chip">Soja</span>
+                </div>
+
+                <p style="font-size:10px;color:#64748b;margin:10px 0 6px">Mode de paiement</p>
+                <div class="chip-row">
+                  <span class="chip active-blue">💶 Espèces</span>
+                  <span class="chip">💳 Carte</span>
+                  <span class="chip">🏦 Virement</span>
+                </div>
+
+                <button class="btn-demo">✓ Enregistrer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stock Screenshot -->
+      <div class="card">
+        <div class="card-header">Gestion du Stock</div>
+        <div class="card-body">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="phone-topbar">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="font-size:12px;font-weight:600">📦 Stock</span>
+                </div>
+                <span style="font-size:10px;color:#fbbf24">3 articles</span>
+              </div>
+              <div class="phone-content">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+                  <div style="background:linear-gradient(135deg,rgba(251,191,36,.1),transparent);border:1px solid rgba(251,191,36,.15);border-radius:10px;padding:10px">
+                    <div style="font-size:9px;color:#fbbf24">En stock</div>
+                    <div style="font-size:14px;font-weight:700;color:#e2e8f0">150 kg</div>
+                  </div>
+                  <div style="background:linear-gradient(135deg,rgba(59,130,246,.1),transparent);border:1px solid rgba(59,130,246,.15);border-radius:10px;padding:10px">
+                    <div style="font-size:9px;color:#3b82f6">Valeur</div>
+                    <div style="font-size:14px;font-weight:700;color:#e2e8f0">75 000 FCFA</div>
+                  </div>
+                </div>
+
+                <div style="background:#151d30;border-radius:10px;padding:12px;margin-bottom:8px">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                      <div style="font-weight:600;font-size:11px">Maïs</div>
+                      <div style="font-size:9px;color:#64748b">50 kg · 25 000 FCFA</div>
+                    </div>
+                    <span style="background:rgba(251,191,36,.12);color:#fbbf24;padding:3px 8px;border-radius:6px;font-size:9px">depuis 5 jours</span>
+                  </div>
+                </div>
+
+                <div style="background:#151d30;border-radius:10px;padding:12px;margin-bottom:8px">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                      <div style="font-weight:600;font-size:11px">Soja</div>
+                      <div style="font-size:9px;color:#64748b">100 kg · 50 000 FCFA</div>
+                    </div>
+                    <span style="background:rgba(251,191,36,.12);color:#fbbf24;padding:3px 8px;border-radius:6px;font-size:9px">depuis 3 jours</span>
+                  </div>
+                </div>
+
+                <div style="background:#151d30;border-radius:10px;padding:12px;opacity:.5">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                      <div style="font-weight:600;font-size:11px;text-decoration:line-through">Riz</div>
+                      <div style="font-size:9px;color:#64748b">20 kg · Vendu</div>
+                    </div>
+                    <span style="background:rgba(56,189,248,.12);color:#38bdf8;padding:3px 8px;border-radius:6px;font-size:9px">Vendu</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section: How to Use -->
+  <div class="section">
+    <h2><span class="emoji">📝</span> Comment enregistrer une vente</h2>
+    
+    <ol class="step-list">
+      <li>
+        <div class="step-title">Ouvrir la Caisse</div>
+        <div class="step-desc">Appuyez sur l'icône 💰 dans la barre de navigation en bas</div>
+      </li>
+      <li>
+        <div class="step-title">Créer une nouvelle opération</div>
+        <div class="step-desc">Appuyez sur le bouton vert "+ Nouvelle opération"</div>
+      </li>
+      <li>
+        <div class="step-title">Choisir "Vente"</div>
+        <div class="step-desc">Le type Vente est généralement sélectionné par défaut (vert)</div>
+      </li>
+      <li>
+        <div class="step-title">Entrer le montant</div>
+        <div class="step-desc">Tapez le prix de vente. Le FCFA s'affiche automatiquement à droite</div>
+      </li>
+      <li>
+        <div class="step-title">Choisir la catégorie</div>
+        <div class="step-desc">Sélectionnez la catégorie correspondante (Poulets, Œufs, etc.)</div>
+      </li>
+      <li>
+        <div class="step-title">Enregistrer</div>
+        <div class="step-desc">Appuyez sur le bouton "Enregistrer" pour sauvegarder</div>
+      </li>
+    </ol>
+
+    <div class="tip-box">
+      <h4>💡 Conseil</h4>
+      <p>Ajoutez une description pour vous souvenir des détails plus tard. Exemple: "20 poulets à Mme Ablavi, livraison gratuite"</p>
+    </div>
+  </div>
+
+  <!-- Section: Features -->
+  <div class="section">
+    <h2><span class="emoji">✨</span> Fonctionnalités principales</h2>
+    
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="icon">📴</div>
+        <h4>Fonctionne hors ligne</h4>
+        <p>Utilisez l'app même sans connexion Internet</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📊</div>
+        <h4>Rapports automatiques</h4>
+        <p>Visualisez vos recettes et dépenses par période</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📦</div>
+        <h4>Gestion du stock</h4>
+        <p>Suivez vos articles stockés et leur valeur</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🚚</div>
+        <h4>Bordereaux</h4>
+        <p>Créez des documents pour les livraisons</p>
+      </div>
+      <div class="feature">
+        <div class="icon">☁️</div>
+        <h4>Synchronisation</h4>
+        <p>Sauvegardez vos données sur Google Sheets</p>
+      </div>
+      <div class="feature">
+        <div class="icon">👥</div>
+        <h4>Multi-utilisateurs</h4>
+        <p>Plusieurs personnes peuvent utiliser l'app</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="text-align:center;margin-top:60px;padding:30px;color:#86868b">
+    <div style="font-size:2em;margin-bottom:10px">🌾</div>
+    <p><strong>Tcha Agro</strong> — Gestion simple et efficace</p>
+    <p style="font-size:.9em;margin-top:10px">Pour plus d'aide, consultez le fichier <code>Guide_TchaAgro_FR.md</code></p>
+  </div>
+</div>
+
+</body>
+</html>

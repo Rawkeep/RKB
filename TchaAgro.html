@@ -673,7 +673,7 @@ const state = {
   online: navigator.onLine,
   lastSync: localStorage.getItem('kf_lastSync'),
   simpleMode: localStorage.getItem('kf_simpleMode') !== '0',
-  lang: localStorage.getItem('kf_lang') || 'de',
+  lang: localStorage.getItem('kf_lang') || 'fr',
   adminVerified: false,
   gsConfig: JSON.parse(localStorage.getItem('kf_gsConfig') || 'null') || { sheetId: '', apiEndpoint: '', apiKey: '' }
 };
@@ -1234,13 +1234,16 @@ async function renderTxnForm() {
     // Amount
     content.appendChild(h('div',null,h('label',{className:'label'},t('amount')+' *'),
       (() => {
-        const wrap = h('div',{style:{position:'relative'}});
-        wrap.appendChild(h('span',{style:{position:'absolute',left:'16px',top:'50%',transform:'translateY(-50%)',fontSize:'24px',color:'var(--text4)'}},'FCFA'));
-        const inp = h('input',{className:'input',type:'number',inputMode:'decimal',placeholder:'0',value:form.amount,
-          style:{paddingLeft:'48px',fontSize:'24px',fontWeight:'700',padding:'16px 14px 16px 48px'},
-          onInput:e=>form.amount=e.target.value});
+        const wrap = h('div',{style:{position:'relative',display:'flex',alignItems:'center',background:'var(--bg2)',border:'1px solid var(--border)',borderRadius:'var(--radius)',overflow:'hidden'}});
+        const inp = h('input',{type:'number',inputMode:'decimal',placeholder:'0',value:form.amount,
+          style:{flex:'1',border:'none',background:'transparent',fontSize:'28px',fontWeight:'700',padding:'16px 14px',color:'var(--text)',outline:'none',width:'100%',textAlign:'right',fontFamily:'"JetBrains Mono",monospace'},
+          onInput:e=>form.amount=e.target.value,
+          onFocus:e=>{wrap.style.borderColor='rgba(59,130,246,.5)';if(e.target.value==='0')e.target.value='';},
+          onBlur:e=>{wrap.style.borderColor='var(--border)';if(e.target.value==='')e.target.value='';}
+        });
         if(!isEdit)setTimeout(()=>inp.focus(),100);
         wrap.appendChild(inp);
+        wrap.appendChild(h('span',{style:{padding:'16px 16px 16px 8px',fontSize:'16px',fontWeight:'600',color:'var(--brand1)',background:'linear-gradient(90deg,transparent,rgba(217,119,6,.08))',whiteSpace:'nowrap'}},'FCFA'));
         return wrap;
       })()
     ));
