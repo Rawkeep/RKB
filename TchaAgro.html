@@ -606,63 +606,70 @@ async function dbClear(store) {
   });
 }
 
-// ─── Seed Demo Data ──────────────────────────────────────────
+// ─── Données initiales et suggestions ────────────────────────
+
+// Suggestions d'articles prédéfinies (pour les bordereaux)
+const ARTICLE_SUGGESTIONS = [
+  { name: 'Poulets vivants', sku: 'POU-VIF', unit: 'pièce', defaultPrice: 5000 },
+  { name: 'Poulets abattus', sku: 'POU-ABT', unit: 'kg', defaultPrice: 3500 },
+  { name: 'Œufs (plateau de 30)', sku: 'OEU-30', unit: 'plateau', defaultPrice: 3000 },
+  { name: 'Œufs (carton de 180)', sku: 'OEU-180', unit: 'carton', defaultPrice: 17000 },
+  { name: 'Aliment poulet 50kg', sku: 'ALI-50', unit: 'sac', defaultPrice: 18500 },
+  { name: 'Aliment poulet 25kg', sku: 'ALI-25', unit: 'sac', defaultPrice: 9500 },
+  { name: 'Aliment poussin 25kg', sku: 'ALP-25', unit: 'sac', defaultPrice: 11000 },
+  { name: 'Maïs grain', sku: 'MAI-GR', unit: 'kg', defaultPrice: 350 },
+  { name: 'Soja torréfié', sku: 'SOJ-TO', unit: 'kg', defaultPrice: 600 },
+  { name: 'Concentré ponte', sku: 'CON-PO', unit: 'sac', defaultPrice: 25000 },
+  { name: 'Vaccin Newcastle', sku: 'VAC-NEW', unit: 'flacon', defaultPrice: 3500 },
+  { name: 'Antibiotique volaille', sku: 'ANT-VOL', unit: 'flacon', defaultPrice: 5000 },
+  { name: 'Vitamines', sku: 'VIT-GEN', unit: 'sachet', defaultPrice: 1500 },
+  { name: 'Poussins 1 jour', sku: 'PSN-1J', unit: 'pièce', defaultPrice: 750 },
+  { name: 'Copeaux de bois', sku: 'COP-BO', unit: 'sac', defaultPrice: 2500 },
+];
+
+// Suggestions de partenaires (fournisseurs/clients)
+const PARTNER_SUGGESTIONS = [
+  'Marché Grand Lomé',
+  'Fournisseur Aliment Lomé',
+  'Restaurant Le Bénin',
+  'Hôtel de la Paix',
+  'Superette Bon Prix',
+  'Abobo Volaille SA',
+  'Ferme Avicole Kara',
+  'Grossiste Adja',
+];
+
+// Unités disponibles
+const UNIT_OPTIONS = ['pièce', 'kg', 'sac', 'plateau', 'carton', 'litre', 'tonne', 'flacon', 'sachet'];
+
 async function seed() {
   const count = await dbCount('users');
   if (count > 0) return;
-  const n = now(), d = today();
+  const n = now();
+
+  // Utilisateur admin par défaut (PIN à changer après première connexion)
   const users = [
-    {id:'u1',username:'kofi',display_name:'Kofi',pin_hash:'1234',role:'admin',is_active:true,created_at:n,updated_at:n},
-    {id:'u2',username:'ama',display_name:'Ama',pin_hash:'5678',role:'member',is_active:true,created_at:n,updated_at:n},
-    {id:'u3',username:'yao',display_name:'Yao',pin_hash:'9012',role:'member',is_active:true,created_at:n,updated_at:n},
+    {id:'u1',username:'admin',display_name:'Administrateur',pin_hash:'0000',role:'admin',is_active:true,created_at:n,updated_at:n},
   ];
   for (const u of users) await dbPut('users', u);
 
+  // Catégories en français
   const cats = [
-    {id:'c1',name:'Hühner (lebend)',type:'sale',is_active:true,sort_order:1},
-    {id:'c2',name:'Hühnerfleisch',type:'sale',is_active:true,sort_order:2},
-    {id:'c3',name:'Eier',type:'sale',is_active:true,sort_order:3},
-    {id:'c4',name:'Futter (Verkauf)',type:'sale',is_active:true,sort_order:4},
-    {id:'c5',name:'Futter (Einkauf)',type:'expense',is_active:true,sort_order:5},
-    {id:'c6',name:'Medikamente/Impfung',type:'expense',is_active:true,sort_order:6},
-    {id:'c7',name:'Personal',type:'expense',is_active:true,sort_order:7},
-    {id:'c8',name:'Transport',type:'expense',is_active:true,sort_order:8},
-    {id:'c9',name:'Strom/Wasser',type:'expense',is_active:true,sort_order:9},
-    {id:'c10',name:'Sonstige Einnahme',type:'income',is_active:true,sort_order:10},
-    {id:'c11',name:'Sonstiges',type:'all',is_active:true,sort_order:11},
+    {id:'c1',name:'Poulets vivants',type:'sale',is_active:true,sort_order:1},
+    {id:'c2',name:'Poulets abattus',type:'sale',is_active:true,sort_order:2},
+    {id:'c3',name:'Œufs',type:'sale',is_active:true,sort_order:3},
+    {id:'c4',name:'Aliment (vente)',type:'sale',is_active:true,sort_order:4},
+    {id:'c5',name:'Poussins',type:'sale',is_active:true,sort_order:5},
+    {id:'c6',name:'Aliment (achat)',type:'expense',is_active:true,sort_order:6},
+    {id:'c7',name:'Médicaments/Vaccins',type:'expense',is_active:true,sort_order:7},
+    {id:'c8',name:'Personnel',type:'expense',is_active:true,sort_order:8},
+    {id:'c9',name:'Transport',type:'expense',is_active:true,sort_order:9},
+    {id:'c10',name:'Électricité/Eau',type:'expense',is_active:true,sort_order:10},
+    {id:'c11',name:'Matériel',type:'expense',is_active:true,sort_order:11},
+    {id:'c12',name:'Autre recette',type:'income',is_active:true,sort_order:12},
+    {id:'c13',name:'Autre dépense',type:'expense',is_active:true,sort_order:13},
   ];
   for (const c of cats) await dbPut('categories', c);
-
-  const txns = [
-    {id:'t1',type:'sale',amount:75000,category:'Hühner (lebend)',description:'15 Hühner an Mme Ablavi',payment_method:'cash',date:d,time:'07:30',status:'active',revision:1,created_by:'u1',created_at:n,updated_by:'u1',updated_at:n,_sync:'synced'},
-    {id:'t2',type:'sale',amount:12000,category:'Eier',description:'4 Tabletts à 30 Eier',payment_method:'cash',date:d,time:'09:00',status:'active',revision:1,created_by:'u2',created_at:n,updated_by:'u2',updated_at:n,_sync:'synced'},
-    {id:'t3',type:'expense',amount:185000,category:'Futter (Einkauf)',description:'10 Sack Hühnerfutter 50kg',payment_method:'cash',date:d,time:'10:30',status:'active',revision:1,created_by:'u1',created_at:n,updated_by:'u1',updated_at:n,_sync:'synced'},
-    {id:'t4',type:'sale',amount:45000,category:'Hühnerfleisch',description:'9 kg Poulet an Restaurant Le Bénin',payment_method:'transfer',date:d,time:'13:00',status:'active',revision:1,created_by:'u2',created_at:n,updated_by:'u2',updated_at:n,_sync:'synced'},
-    {id:'t5',type:'expense',amount:25000,category:'Medikamente/Impfung',description:'Impfstoff Newcastle-Krankheit',payment_method:'cash',date:d,time:'08:00',status:'active',revision:1,created_by:'u1',created_at:n,updated_by:'u1',updated_at:n,_sync:'synced'},
-  ];
-  for (const t of txns) await dbPut('transactions', t);
-
-  const docs = [
-    {id:'sd1',doc_number:'EIN-2025-001',doc_type:'inbound',partner_name:'Fournisseur Aliment Lomé',reference:'Futter-Lieferung',doc_date:d,doc_time:'07:00',status:'eingelagert',total_qty:20,total_value:370000,notes:'Lager bis Preis steigt',revision:1,created_by:'u1',created_at:n,updated_by:'u1',updated_at:n,_sync:'synced'},
-    {id:'sd2',doc_number:'AUS-2025-001',doc_type:'outbound',partner_name:'Marché Grand Lomé',reference:'Wochenlieferung',doc_date:d,doc_time:'06:30',status:'final',total_qty:50,total_value:250000,notes:'',revision:1,created_by:'u2',created_at:n,updated_by:'u2',updated_at:n,_sync:'synced'},
-  ];
-  for (const doc of docs) await dbPut('shipment_docs', doc);
-
-  const items = [
-    {id:'si1',doc_id:'sd1',line_number:1,article_name:'Hühnerfutter 50kg',sku:'FUT-50',quantity:10,unit:'Sack',unit_price:18500,line_total:185000,note:'Lager Bâtiment A',revision:1,created_by:'u1',created_at:n,updated_by:'u1',updated_at:n},
-    {id:'si2',doc_id:'sd1',line_number:2,article_name:'Hühnerfutter 25kg',sku:'FUT-25',quantity:10,unit:'Sack',unit_price:18500,line_total:185000,note:'Lager Bâtiment A',revision:1,created_by:'u1',created_at:n,updated_by:'u1',updated_at:n},
-    {id:'si3',doc_id:'sd2',line_number:1,article_name:'Hühner (lebend)',sku:'HUH-L',quantity:30,unit:'Stk',unit_price:5000,line_total:150000,note:'',revision:1,created_by:'u2',created_at:n,updated_by:'u2',updated_at:n},
-    {id:'si4',doc_id:'sd2',line_number:2,article_name:'Eier (Tablett à 30)',sku:'EI-30',quantity:20,unit:'Tablett',unit_price:3000,line_total:60000,note:'',revision:1,created_by:'u2',created_at:n,updated_by:'u2',updated_at:n},
-  ];
-  for (const it of items) await dbPut('shipment_items', it);
-
-  const audits = [
-    {id:'a1',entity_type:'transaction',entity_id:'t1',action:'create',changes:'{}',user_id:'u1',timestamp:n},
-    {id:'a2',entity_type:'transaction',entity_id:'t2',action:'create',changes:'{}',user_id:'u2',timestamp:n},
-    {id:'a3',entity_type:'shipment_doc',entity_id:'sd1',action:'create',changes:'{}',user_id:'u1',timestamp:n},
-    {id:'a4',entity_type:'shipment_doc',entity_id:'sd1',action:'update',changes:JSON.stringify({status:{old:'draft',new:'final'}}),user_id:'u1',timestamp:n},
-  ];
-  for (const a of audits) await dbPut('audit_log', a);
 }
 
 // ─── App State ───────────────────────────────────────────────
@@ -896,17 +903,13 @@ function renderLogin() {
   form.append(uWrap, pWrap, err, submit);
   box.appendChild(form);
 
-  // Demo hints
-  const demoBox = h('div',{style:{marginTop:'32px',padding:'14px',borderRadius:'12px',background:'var(--bg2)',border:'1px solid var(--border)'}});
-  demoBox.appendChild(h('p',{style:{fontSize:'11px',color:'var(--text4)',textAlign:'center',marginBottom:'8px'}},t('demoAccess')));
-  const grid = h('div',{className:'demo-grid'});
-  [{n:'kofi',p:'1234'},{n:'ama',p:'5678'},{n:'yao',p:'9012'}].forEach(u=>{
-    grid.appendChild(h('div',{className:'demo-btn',onClick:()=>{uInput.value=u.n;pInput.value=u.p;uname=u.n;pin=u.p;}},
-      h('div',{className:'name'},u.n), h('div',{className:'pin'},u.p)
-    ));
-  });
-  demoBox.appendChild(grid);
-  box.appendChild(demoBox);
+  // Info d'aide
+  const helpBox = h('div',{style:{marginTop:'32px',padding:'16px',borderRadius:'12px',background:'linear-gradient(135deg,rgba(217,119,6,.08),rgba(21,128,61,.08))',border:'1px solid rgba(217,119,6,.2)'}});
+  helpBox.appendChild(h('p',{style:{fontSize:'12px',color:'var(--text2)',textAlign:'center',lineHeight:'1.5'}},
+    '🐔 Bienvenue dans Tcha Agro'));
+  helpBox.appendChild(h('p',{style:{fontSize:'11px',color:'var(--text3)',textAlign:'center',marginTop:'8px'}},
+    'Première connexion: admin / 0000'));
+  box.appendChild(helpBox);
   wrap.appendChild(box);
   app.appendChild(wrap);
 }
@@ -1471,10 +1474,18 @@ async function renderShipForm() {
     });
     content.appendChild(typeRow);
 
-    // Partner
-    content.appendChild(h('div',null,h('label',{className:'label'},`${form.doc_type==='inbound'?t('supplier'):t('customer')} *`),
-      h('input',{className:'input',type:'text',placeholder:form.doc_type==='inbound'?'Fournisseur Lomé':'Marché, Restaurant…',value:form.partner_name,
-        onInput:e=>form.partner_name=e.target.value})));
+    // Partner with datalist suggestions
+    const partnerWrap = h('div',null);
+    partnerWrap.appendChild(h('label',{className:'label'},`${form.doc_type==='inbound'?t('supplier'):t('customer')} *`));
+    const partnerInput = h('input',{className:'input',type:'text',list:'partner-suggestions',
+      placeholder:form.doc_type==='inbound'?'Sélectionner ou saisir...':'Sélectionner ou saisir...',
+      value:form.partner_name,autocomplete:'off',
+      onInput:e=>form.partner_name=e.target.value});
+    partnerWrap.appendChild(partnerInput);
+    const partnerList = h('datalist',{id:'partner-suggestions'});
+    PARTNER_SUGGESTIONS.forEach(p=>partnerList.appendChild(h('option',{value:p})));
+    partnerWrap.appendChild(partnerList);
+    content.appendChild(partnerWrap);
 
     // Reference & Date
     const row = h('div',{className:'grid2'});
@@ -1499,7 +1510,7 @@ async function renderShipForm() {
     const linesHdr = h('div',{className:'flex-between',style:{marginBottom:'4px'}});
     linesHdr.appendChild(h('label',{className:'label',style:{margin:0}},t('positions')));
     const addLineBtn = h('button',{className:'btn-ghost btn-sm',style:{color:'var(--blue)',fontSize:'11px'},
-      onClick:()=>{lines.push({id:uuid(),article_name:'',sku:'',quantity:'',unit:'Stk',unit_price:''});rebuildForm()}});
+      onClick:()=>{lines.push({id:uuid(),article_name:'',sku:'',quantity:'',unit:'pièce',unit_price:''});rebuildForm()}});;
     addLineBtn.innerHTML=`${I.plus} ${t('addLine')}`;
     linesHdr.appendChild(addLineBtn);
     linesWrap.appendChild(linesHdr);
@@ -1516,9 +1527,22 @@ async function renderShipForm() {
       li.appendChild(liHdr);
 
       const r1 = h('div',{className:'line-row line-row-3',style:{marginTop:'6px'}});
+      const articleInput = h('input',{className:'input',type:'text',list:`article-suggestions-${idx}`,placeholder:t('article'),value:line.article_name,style:{fontSize:'13px',padding:'10px 12px'},autocomplete:'off',
+        onInput:e=>{
+          line.article_name=e.target.value;
+          // Auto-fill SKU, unit and price from suggestions
+          const match = ARTICLE_SUGGESTIONS.find(a=>a.name===e.target.value);
+          if(match){
+            line.sku=match.sku;
+            line.unit=match.unit;
+            line.unit_price=match.defaultPrice;
+            rebuildForm();
+          }
+        }});
+      const articleList = h('datalist',{id:`article-suggestions-${idx}`});
+      ARTICLE_SUGGESTIONS.forEach(a=>articleList.appendChild(h('option',{value:a.name})));
       r1.append(
-        h('input',{className:'input',type:'text',placeholder:t('article'),value:line.article_name,style:{fontSize:'13px',padding:'10px 12px'},
-          onInput:e=>line.article_name=e.target.value}),
+        (() => { const w = h('div',{style:{position:'relative'}}); w.append(articleInput, articleList); return w; })(),
         h('input',{className:'input text-mono',type:'text',placeholder:'SKU',value:line.sku,style:{fontSize:'13px',padding:'10px 12px'},
           onInput:e=>line.sku=e.target.value})
       );
@@ -1530,7 +1554,7 @@ async function renderShipForm() {
           onInput:e=>{line.quantity=e.target.value;rebuildForm()}}),
         (() => {
           const sel = h('select',{className:'input',style:{fontSize:'13px',padding:'10px 6px'},onInput:e=>line.unit=e.target.value});
-          ['Stk','kg','Sack','Tablett','Karton','Liter','Tonne'].forEach(u=>sel.appendChild(h('option',{value:u,selected:line.unit===u?true:undefined},u)));
+          UNIT_OPTIONS.forEach(u=>sel.appendChild(h('option',{value:u,selected:line.unit===u?true:undefined},u)));
           return sel;
         })(),
         h('input',{className:'input tabular',type:'number',inputMode:'decimal',step:'0.01',placeholder:t('price'),value:line.unit_price,style:{fontSize:'13px',padding:'10px 12px'},
