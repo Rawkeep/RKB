@@ -672,6 +672,26 @@ async function seed() {
   for (const c of cats) await dbPut('categories', c);
 }
 
+// Migration: S'assurer que l'utilisateur admin existe
+async function ensureAdminUser() {
+  const users = await dbGetAll('users');
+  const adminExists = users.some(u => u.username === 'admin');
+  if (!adminExists) {
+    const n = now();
+    await dbPut('users', {
+      id: 'u_admin_' + Date.now(),
+      username: 'admin',
+      display_name: 'Administrateur',
+      pin_hash: '0000',
+      role: 'admin',
+      is_active: true,
+      created_at: n,
+      updated_at: n
+    });
+    console.log('Admin user created: admin / 0000');
+  }
+}
+
 // ─── App State ───────────────────────────────────────────────
 const state = {
   user: null, token: null,
@@ -1285,7 +1305,7 @@ async function renderTxnForm() {
 
     // Save button
     const actions = h('div',{style:{display:'flex',gap:'10px',marginTop:'8px'}});
-    if(isEdit){
+    if(isEdit && isAdmin()){
       const voidBtn = h('button',{className:'btn btn-danger',onClick:async()=>{
         if(!confirm(t('voidConfirm')))return;
         await dbPut('transactions',{...(await dbGet('transactions',id)),status:'void',updated_by:state.user.id,updated_at:now(),_sync:'pending'});
@@ -2261,6 +2281,7 @@ if ('serviceWorker' in navigator) {
 (async () => {
   await openDB();
   await seed();
+  await ensureAdminUser();
   await restoreSession();
   parseHash();
   render();
