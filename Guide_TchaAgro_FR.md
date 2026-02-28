@@ -5,6 +5,17 @@ Tcha Agro est une application de gestion de caisse et de stock conçue pour fonc
 
 ---
 
+## � Première connexion
+
+### Compte administrateur par défaut
+| Utilisateur | PIN |
+|-------------|-----|
+| **admin** | **0000** |
+
+> ⚠️ **Important**: Changez le PIN après la première connexion pour sécuriser votre compte.
+
+---
+
 ## 📱 Présentation de l'interface
 
 ### Barre de navigation (en bas de l'écran)
@@ -24,7 +35,7 @@ Tcha Agro est une application de gestion de caisse et de stock conçue pour fonc
 Appuyez sur l'icône **Caisse** (💰) dans la barre de navigation.
 
 ### Étape 2: Créer une nouvelle opération
-Appuyez sur le bouton **+ Nouvelle opération**.
+Appuyez sur le bouton **+ Nouveau**.
 
 ### Étape 3: Choisir le type
 - 🟢 **Vente** — Argent reçu d'une vente
@@ -42,13 +53,30 @@ Appuyez sur le bouton **+ Nouvelle opération**.
 - Utilisez le clavier numérique
 
 ### Étape 5: Choisir la catégorie
-Appuyez sur une des catégories proposées (ex: Poulets, Transport, etc.)
+Catégories disponibles:
+
+**Pour les ventes:**
+- Poulets vivants
+- Poulets abattus
+- Œufs
+- Aliment (vente)
+- Poussins
+
+**Pour les dépenses:**
+- Aliment (achat)
+- Médicaments/Vaccins
+- Personnel
+- Transport
+- Électricité/Eau
+- Matériel
 
 ### Étape 6: Ajouter une description (optionnel)
 Exemple: "20 poulets à Mme Ablavi"
 
 ### Étape 7: Enregistrer
-Appuyez sur le bouton **Enregistrer** pour sauvegarder.
+Appuyez sur le bouton **✓ Enregistrer** pour sauvegarder.
+
+> 🔒 **Note**: Seul l'administrateur peut annuler/supprimer une opération.
 
 ---
 
@@ -64,7 +92,7 @@ Appuyez sur le bouton **Enregistrer** pour sauvegarder.
 
 ### Vendre un article
 1. Appuyez sur un article de la liste
-2. Appuyez sur **Vendre**
+2. Appuyez sur **↑ Vendre**
 3. Entrez le prix de vente
 4. Confirmez la vente
 
@@ -125,14 +153,7 @@ Appuyez sur **Exporter CSV** pour télécharger vos données.
 
 ---
 
-## 🔐 Connexion
-
-### Comptes de démonstration
-| Utilisateur | PIN | Rôle |
-|-------------|-----|------|
-| Chef | 1234 | Admin |
-| Yao | 1111 | Normal |
-| Ami | 2222 | Normal |
+## 🔐 Gestion des utilisateurs
 
 ### Se connecter
 1. Entrez votre nom d'utilisateur
@@ -140,7 +161,13 @@ Appuyez sur **Exporter CSV** pour télécharger vos données.
 3. Appuyez sur **Connexion**
 
 ### Se déconnecter
-Allez dans **Plus** et appuyez sur **Déconnexion**.
+Allez dans **Plus** et appuyez sur **🚪 Déconnexion**.
+
+### Droits administrateur
+L'administrateur peut:
+- Annuler/supprimer des opérations
+- Modifier les paramètres
+- Exporter les données
 
 ---
 
