@@ -519,12 +519,12 @@ function t(key, params = {}) {
 const TXN_TYPE = new Proxy({}, { get: (_, k) => ({ sale: t('sale'), income: t('incomeType'), expense: t('expense') })[k] });
 const PAY = new Proxy({}, { get: (_, k) => ({ cash: t('cash'), card: t('card'), transfer: t('transfer') })[k] });
 const SHIP_TYPE = new Proxy({}, { get: (_, k) => ({ inbound: t('inbound'), outbound: t('outbound') })[k] });
-const STATUS_LABEL = new Proxy({}, { get: (_, k) => ({ draft: t('draft'), final: t('delivered'), cancelled: t('cancelled'), eingelagert: t('stored'), verkauft: t('sold') })[k] });
+const STATUS_LABEL = new Proxy({}, { get: (_, k) => ({ draft: t('draft'), final: t('delivered'), cancelled: t('cancelled'), en_stock: t('stored'), vendu: t('sold') })[k] });
 
 const TXN_BADGE = { sale:'badge-green', income:'badge-sky', expense:'badge-red' };
 const TXN_COLOR = { sale:'var(--green)', income:'var(--sky)', expense:'var(--red)' };
 const SHIP_BADGE = { inbound:'badge-violet', outbound:'badge-amber' };
-const STATUS_BADGE = { draft:'badge-gray', final:'badge-green', cancelled:'badge-red', eingelagert:'badge-amber', verkauft:'badge-sky' };
+const STATUS_BADGE = { draft:'badge-gray', final:'badge-green', cancelled:'badge-red', en_stock:'badge-amber', vendu:'badge-sky' };
 const ACTION_LABEL = new Proxy({}, { get: (_, k) => ({ create: t('actionCreate'), update: t('actionUpdate'), delete: t('actionDelete'), void: t('actionVoid') })[k] });
 const ENTITY_LABEL = new Proxy({}, { get: (_, k) => ({ transaction: t('entityTransaction'), shipment_doc: t('entityShipment'), shipment_item: t('entityItem'), user: t('entityUser') })[k] });
 
@@ -952,13 +952,13 @@ function renderShell(content) {
   const tr = h('div',{className:'topbar-right'});
 
   const syncBtn = h('button',{className:'sync-btn',onClick:triggerSync,
-    title:state.lastSync?`Letzter Sync: ${fmtRelative(state.lastSync)}`:'Noch nicht synchronisiert'});
+    title:state.lastSync?`${t('lastSync')}: ${fmtRelative(state.lastSync)}`:t('syncNow')});
   syncBtn.appendChild(h('span',{className:`sync-dot ${state.online?'online':'offline'}`}));
   if(state.pendingCount>0) syncBtn.appendChild(h('span',{className:'pending-badge'},String(state.pendingCount)));
   tr.appendChild(syncBtn);
 
   const logoutBtn = h('button',{className:'btn-ghost',onClick:logout,
-    style:{padding:'6px',borderRadius:'8px'},innerHTML:I.logout,title:'Abmelden'});
+    style:{padding:'6px',borderRadius:'8px'},innerHTML:I.logout,title:t('logout')});
   tr.appendChild(logoutBtn);
 
   topbar.append(tl,tr);
@@ -1009,7 +1009,7 @@ function renderShell(content) {
 async function renderDashboard() {
   const txns = (await dbGetAll('transactions')).filter(t=>t.date===today()&&t.status==='active');
   const audits = (await dbGetAll('audit_log')).sort((a,b)=>b.timestamp.localeCompare(a.timestamp)).slice(0,15);
-  const storedDocs = (await dbGetAll('shipment_docs')).filter(d=>d.status==='eingelagert');
+  const storedDocs = (await dbGetAll('shipment_docs')).filter(d=>d.status==='en_stock');
   const storedValue = storedDocs.reduce((s,d)=>s+d.total_value,0);
   const um = userMap();
 
@@ -1236,7 +1236,7 @@ async function renderTxnForm() {
 
     // Header
     const hdr = h('div',{style:{display:'flex',alignItems:'center',gap:'10px',marginBottom:'20px'}});
-    const backBtn = h('button',{className:'btn-ghost',style:{padding:'8px',borderRadius:'10px',marginLeft:'-8px'},onClick:()=>navigate('transactions')});
+    const backBtn = h('button',{className:'btn-ghost',style:{padding:'8px',borderRadius:'10px',marginLeft:'-8px'},title:t('back'),onClick:()=>navigate('transactions')});
     backBtn.innerHTML=I.back;
     hdr.append(backBtn, h('h2',{style:{fontSize:'18px',fontWeight:'700'}},isEdit?t('editBooking'):t('newBooking')));
     page.appendChild(hdr);
@@ -1360,13 +1360,13 @@ async function renderTxnDetail() {
 
   const hdr = h('div',{className:'flex-between',style:{marginBottom:'20px'}});
   const hdrL = h('div',{style:{display:'flex',alignItems:'center',gap:'10px'}});
-  const backBtn = h('button',{className:'btn-ghost',style:{padding:'8px',borderRadius:'10px',marginLeft:'-8px'},onClick:()=>navigate('transactions')});
+  const backBtn = h('button',{className:'btn-ghost',style:{padding:'8px',borderRadius:'10px',marginLeft:'-8px'},title:t('back'),onClick:()=>navigate('transactions')});
   backBtn.innerHTML=I.back;
   hdrL.append(backBtn,h('h2',{style:{fontSize:'18px',fontWeight:'700'}},t('booking')));
   hdr.appendChild(hdrL);
   if(txn.status==='active'){
-    const editBtn = h('button',{className:'btn-ghost',style:{padding:'8px',borderRadius:'10px'},onClick:()=>navigate('txn-form',id)});
-    editBtn.innerHTML=I.edit;hdr.appendChild(editBtn);
+    const editBtn = h('button',{className:'btn btn-sm btn-ghost',style:{display:'flex',alignItems:'center',gap:'6px'},title:t('edit'),onClick:()=>navigate('txn-form',id)});
+    editBtn.innerHTML=I.edit+`<span>${t('edit')}</span>`;hdr.appendChild(editBtn);
   }
   page.appendChild(hdr);
 
@@ -1475,7 +1475,7 @@ async function renderShipForm() {
 
     const page = h('div',{className:'page',style:{maxWidth:'480px',margin:'0 auto',paddingBottom:'80px'}});
     const hdr = h('div',{style:{display:'flex',alignItems:'center',gap:'10px',marginBottom:'20px'}});
-    const backBtn = h('button',{className:'btn-ghost',style:{padding:'8px',borderRadius:'10px',marginLeft:'-8px'},onClick:()=>navigate('shipments')});
+    const backBtn = h('button',{className:'btn-ghost',style:{padding:'8px',borderRadius:'10px',marginLeft:'-8px'},title:t('back'),onClick:()=>navigate('shipments')});
     backBtn.innerHTML=I.back;
     hdr.append(backBtn,h('h2',{style:{fontSize:'18px',fontWeight:'700'}},isEdit?t('editShipment'):t('newShipment')));
     page.appendChild(hdr);
@@ -1518,7 +1518,7 @@ async function renderShipForm() {
     // Status
     const statusWrap = h('div',null,h('label',{className:'label'},t('status')));
     const statusChips = h('div',{className:'grid3'});
-    [{v:'draft',l:t('draft'),c:'chip-gray'},{v:'eingelagert',l:'📦 '+t('stored'),c:'chip-amber'},{v:'final',l:'✅ '+t('delivered'),c:'chip-green'},{v:'verkauft',l:'💰 '+t('sold'),c:'chip-sky'},{v:'cancelled',l:t('cancelled'),c:'chip-red'}].forEach(s=>{
+    [{v:'draft',l:t('draft'),c:'chip-gray'},{v:'en_stock',l:'📦 '+t('stored'),c:'chip-amber'},{v:'final',l:'✅ '+t('delivered'),c:'chip-green'},{v:'vendu',l:'💰 '+t('sold'),c:'chip-sky'},{v:'cancelled',l:t('cancelled'),c:'chip-red'}].forEach(s=>{
       statusChips.appendChild(h('div',{className:`chip ${s.c} ${form.status===s.v?'active':''}`,style:{textAlign:'center'},
         onClick:()=>{form.status=s.v;rebuildForm()}},s.l));
     });
@@ -1540,7 +1540,7 @@ async function renderShipForm() {
       const liHdr = h('div',{className:'line-hdr'});
       liHdr.appendChild(h('span',{className:'line-num'},`#${idx+1}`));
       if(lines.length>1){
-        const delBtn = h('button',{className:'btn-ghost',style:{padding:'4px',color:'var(--text4)'},
+        const delBtn = h('button',{className:'btn-ghost',style:{padding:'4px',color:'var(--text4)'},title:t('delete'),
           onClick:()=>{lines.splice(idx,1);rebuildForm()}});
         delBtn.innerHTML=I.trash;liHdr.appendChild(delBtn);
       }
@@ -1669,15 +1669,15 @@ async function renderShipDetail() {
 
   const hdr = h('div',{className:'flex-between no-print',style:{marginBottom:'20px'}});
   const hdrL = h('div',{style:{display:'flex',alignItems:'center',gap:'10px'}});
-  const backBtn = h('button',{className:'btn-ghost',style:{padding:'8px',borderRadius:'10px',marginLeft:'-8px'},onClick:()=>navigate('shipments')});
+  const backBtn = h('button',{className:'btn-ghost',style:{padding:'8px',borderRadius:'10px',marginLeft:'-8px'},title:t('back'),onClick:()=>navigate('shipments')});
   backBtn.innerHTML=I.back;
   hdrL.append(backBtn,h('h2',{style:{fontSize:'18px',fontWeight:'700'}},doc.doc_number));
   hdr.appendChild(hdrL);
   const hdrR = h('div',{style:{display:'flex',gap:'6px'}});
-  const editBtn = h('button',{className:'btn-ghost',style:{padding:'8px',borderRadius:'10px'},onClick:()=>navigate('ship-form',id)});
-  editBtn.innerHTML=I.edit;
-  const printBtn = h('button',{className:'btn-ghost',style:{padding:'8px',borderRadius:'10px'},onClick:()=>window.print()});
-  printBtn.innerHTML=I.print;
+  const editBtn = h('button',{className:'btn btn-sm btn-ghost',style:{display:'flex',alignItems:'center',gap:'6px'},title:t('edit'),onClick:()=>navigate('ship-form',id)});
+  editBtn.innerHTML=I.edit+`<span>${t('edit')}</span>`;
+  const printBtn = h('button',{className:'btn btn-sm btn-ghost',style:{display:'flex',alignItems:'center',gap:'6px'},title:'Imprimer',onClick:()=>window.print()});
+  printBtn.innerHTML=I.print+`<span>PDF</span>`;
   hdrR.append(editBtn,printBtn);
   hdr.appendChild(hdrR);
   page.appendChild(hdr);
@@ -1849,8 +1849,8 @@ async function renderWarehouse() {
   const allItems = await dbGetAll('shipment_items');
   const um = userMap();
 
-  const stored = allDocs.filter(d=>d.status==='eingelagert');
-  const sold = allDocs.filter(d=>d.status==='verkauft');
+  const stored = allDocs.filter(d=>d.status==='en_stock');
+  const sold = allDocs.filter(d=>d.status==='vendu');
 
   const storedValue = stored.reduce((s,d)=>s+d.total_value,0);
   const soldValue = sold.reduce((s,d)=>s+d.total_value,0);
@@ -1902,7 +1902,7 @@ async function renderWarehouse() {
     // List
     const list = h('div',{style:{flex:1,overflowY:'auto',padding:'0 16px 16px'}});
 
-    // Eingelagert section
+    // Section articles en stock
     if(stored.length===0 && !showSold){
       list.appendChild(h('div',{style:{textAlign:'center',padding:'48px 0',color:'var(--text4)'}},
         h('p',{style:{fontSize:'36px',marginBottom:'12px'}},'📦'),
@@ -1955,15 +1955,15 @@ async function renderWarehouse() {
             const profit = sellPrice - doc.total_value;
             if(!confirm(t('sellConfirm',{price:fmtCur(sellPrice)})+`\n${profit>=0?t('profit'):t('loss')}: ${fmtCur(Math.abs(profit))}`)) return;
             // Mark as sold
-            await dbPut('shipment_docs',{...doc, status:'verkauft', notes:`${doc.notes}\n${t('sold')}: ${fmtCur(sellPrice)} (EK: ${fmtCur(doc.total_value)}, ${profit>=0?'+':''}${fmtCur(profit)})`, updated_by:state.user.id, updated_at:now(), _sync:'pending'});
+            await dbPut('shipment_docs',{...doc, status:'vendu', notes:`${doc.notes}\n${t('sold')}: ${fmtCur(sellPrice)} (${t('purchaseValue')}: ${fmtCur(doc.total_value)}, ${profit>=0?'+':''}${fmtCur(profit)})`, updated_by:state.user.id, updated_at:now(), _sync:'pending'});
             // Create sale transaction
             await dbPut('transactions',{
-              id:uuid(), type:'sale', amount:sellPrice, category:'Hühner (lebend)',
+              id:uuid(), type:'sale', amount:sellPrice, category:t('warehouse'),
               description:`${t('warehouse')}-${t('sale')}: ${doc.partner_name} - ${doc.reference||doc.doc_number}`,
               payment_method:'cash', date:today(), time:timeNow(), status:'active', revision:1,
               created_by:state.user.id, created_at:now(), updated_by:state.user.id, updated_at:now(), _sync:'pending'
             });
-            await addAudit('shipment_doc',doc.id,'update',{status:{old:'eingelagert',new:'verkauft'},verkaufspreis:sellPrice,gewinn:profit});
+            await addAudit('shipment_doc',doc.id,'update',{status:{old:'en_stock',new:'vendu'},prix_vente:sellPrice,benefice:profit});
             render();
           }});
         sellBtn.innerHTML=`${I.up} ${t('sell')}`;
